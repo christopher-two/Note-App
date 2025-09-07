@@ -1,5 +1,6 @@
 package org.christophertwo.notes.presentation.screens.notes
 
+import android.R.attr.onClick
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -106,14 +107,15 @@ private fun NotesScreen(
             NotesContent(
                 state = state,
                 padding = padding,
-                navController = navController
+                navController = navController,
+                onAction = onAction
             )
         }
     )
 }
 
 @Composable
-fun NotesContent(state: NotesState, padding: PaddingValues, navController: NavController) {
+fun NotesContent(state: NotesState, padding: PaddingValues, navController: NavController, onAction: (NotesAction) -> Unit) {
     if (state.notes.isEmpty()) {
         Box(
             modifier = Modifier
@@ -143,6 +145,9 @@ fun NotesContent(state: NotesState, padding: PaddingValues, navController: NavCo
                         title = note.title,
                         content = note.content,
                         date = note.date.toString(),
+                        onDeleted = {
+                            onAction(NotesAction.DeleteNote(note.id))
+                        },
                         onClick = {
                             Log.d("NotesScreen", "Clicked on note with ID: ${note.id}")
                             navController.navigate(NavigationRoutes.Note.route + "/${note.id}")

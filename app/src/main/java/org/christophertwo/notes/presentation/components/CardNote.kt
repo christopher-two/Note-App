@@ -2,11 +2,17 @@ package org.christophertwo.notes.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
@@ -24,6 +30,7 @@ fun CardNote(
     contentColor: Color = colorScheme.onSurfaceVariant,
     backgroundColor: Color = colorScheme.surfaceVariant,
     modifier: Modifier = Modifier,
+    onDeleted: () -> Unit = {},
     onClick: () -> Unit
 ) {
     Card(
@@ -35,8 +42,7 @@ fun CardNote(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
         ),
-        modifier = modifier
-            .padding(8.dp),
+        modifier = modifier.padding(8.dp),
         onClick = onClick,
         content = {
             Column(
@@ -46,19 +52,35 @@ fun CardNote(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top
             ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium
-                )
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = date,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
                 Text(
                     text = content.take(100) + if (content.length > 100) "..." else "",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = date,
+                IconButton(
+                    onClick = onDeleted,
                     modifier = Modifier.align(Alignment.End),
-                    style = MaterialTheme.typography.bodySmall
+                    content = {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = null,
+                            tint = Color.Red
+                        )
+                    }
                 )
             }
         }

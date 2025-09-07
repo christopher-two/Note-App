@@ -7,10 +7,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.christophertwo.notes.domain.usecase.DeleteNoteUseCase
 import org.christophertwo.notes.domain.usecase.GetNotesUseCase
 
 class NotesViewModel(
-    private val getNotesUseCase: GetNotesUseCase // Se asume que esto devuelve Flow<List<Note>>
+    private val getNotesUseCase: GetNotesUseCase,
+    private val deleteNoteUseCase: DeleteNoteUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(NotesState())
@@ -22,9 +24,6 @@ class NotesViewModel(
 
     init {
         viewModelScope.launch {
-            // Asumimos que getNotesUseCase() devuelve un Flow<List<Note>>.
-            // Si getNotesUseCase() actualmente devuelve List<Note>, necesitarás
-            // modificarlo (y tu DAO de Room) para que devuelva un Flow.
             getNotesUseCase().collect { notesList ->
                 _state.update { currentState ->
                     currentState.copy(notes = notesList.map { it.toNote() })
@@ -43,6 +42,12 @@ class NotesViewModel(
 
             is NotesAction.ShowSheet -> {
                 _state.update { it.copy(selectedNote = action.note) }
+            }
+
+            is NotesAction.DeleteNote -> {
+                viewModelScope.launch {
+                    deleteNoteUseCase(action.id)
+                }
             }
         }
     }
