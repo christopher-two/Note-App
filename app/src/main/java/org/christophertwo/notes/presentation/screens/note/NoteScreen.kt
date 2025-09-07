@@ -5,10 +5,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -34,6 +30,10 @@ import androidx.navigation.NavController
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
 import com.mohamedrejeb.richeditor.ui.material3.RichTextEditorDefaults
+import compose.icons.FontAwesomeIcons
+import compose.icons.fontawesomeicons.Solid
+import compose.icons.fontawesomeicons.solid.ArrowLeft
+import compose.icons.fontawesomeicons.solid.Check
 
 @Composable
 fun NoteRoot(
@@ -87,8 +87,9 @@ private fun NoteScreen(
                         },
                         content = {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                                contentDescription = null
+                                imageVector = FontAwesomeIcons.Solid.ArrowLeft,
+                                contentDescription = null,
+                                modifier = Modifier.size(24.dp),
                             )
                         }
                     )
@@ -100,9 +101,10 @@ private fun NoteScreen(
                         },
                         content = {
                             Icon(
-                                imageVector = Icons.Default.Check,
+                                imageVector = FontAwesomeIcons.Solid.Check,
                                 contentDescription = null,
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(24.dp),
+                                tint = colorScheme.onSurfaceVariant
                             )
                         }
                     )
@@ -122,7 +124,7 @@ private fun NoteScreen(
                 contentColor = colorScheme.onPrimaryContainer,
                 content = {
                     Icon(
-                        imageVector = Icons.Default.Edit,
+                        imageVector = FontAwesomeIcons.Solid.Check,
                         contentDescription = null,
                         modifier = Modifier.size(24.dp)
                     )

@@ -36,12 +36,12 @@ class NotesViewModel(
         when (action) {
             NotesAction.DismissSheet -> _state.update {
                 it.copy(
-                    selectedNote = null
+                    currentBottomSheet = null
                 )
             }
 
             is NotesAction.ShowSheet -> {
-                _state.update { it.copy(selectedNote = action.note) }
+                _state.update { it.copy(currentBottomSheet = action.drawer) }
             }
 
             is NotesAction.DeleteNote -> {
