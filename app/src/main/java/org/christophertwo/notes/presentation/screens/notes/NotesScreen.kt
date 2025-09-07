@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,14 +27,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -76,7 +75,6 @@ private fun NotesScreen(
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { sheetValue ->
@@ -154,8 +152,7 @@ private fun NotesScreen(
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = colorScheme.surfaceContainer,
                         scrolledContainerColor = colorScheme.onSurface,
-                    ),
-                    scrollBehavior = scrollBehavior
+                    )
                 )
             },
             floatingActionButton = {
@@ -182,9 +179,7 @@ private fun NotesScreen(
                     onAction = onAction
                 )
             },
-            modifier = Modifier
-                .fillMaxSize()
-                .nestedScroll(scrollBehavior.nestedScrollConnection),
+            modifier = Modifier.fillMaxSize()
         )
     }
     if (state.currentBottomSheet != null) {
@@ -200,6 +195,7 @@ private fun NotesScreen(
                     RoutesDrawer.ThemeOptions -> {
 
                     }
+
                     RoutesDrawer.ColorTheme -> {
 
                     }
@@ -253,6 +249,7 @@ fun NotesContent(
                         }
                     )
                 }
+                item { Spacer(modifier = Modifier.size(20.dp)) }
             }
         )
     }

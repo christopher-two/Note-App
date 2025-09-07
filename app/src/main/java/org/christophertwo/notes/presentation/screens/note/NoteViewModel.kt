@@ -76,15 +76,6 @@ class NoteViewModel(
     }
 
     private fun performSave(currentState: NoteState) {
-        // This function is called after NoteAction.ChangeContent has updated the state.
-        // Now, currentState.content has the latest content from the RichTextEditor.
-
-        if (currentState.content.isEmpty()) {
-            Log.d("NoteViewModel", "Content is empty, aborting save.")
-            _state.update { it.copy(save = false) } // Reset save flag
-            return
-        }
-
         viewModelScope.launch {
             try {
                 if (currentState.isNewNote) {

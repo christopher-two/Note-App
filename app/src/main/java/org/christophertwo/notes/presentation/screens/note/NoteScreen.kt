@@ -12,6 +12,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -20,6 +22,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -34,10 +38,12 @@ import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.ArrowLeft
 import compose.icons.fontawesomeicons.solid.Check
+import compose.icons.fontawesomeicons.solid.Edit
+import kotlinx.coroutines.launch
 
 @Composable
 fun NoteRoot(
-    viewModel: NoteViewModel = viewModel(),
+    viewModel: NoteViewModel,
     navController: NavController
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -56,6 +62,9 @@ private fun NoteScreen(
     navController: NavController,
     onAction: (NoteAction) -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -70,6 +79,7 @@ private fun NoteScreen(
                         },
                         singleLine = true,
                         onValueChange = { onAction(NoteAction.ChangeTitle(it)) },
+                        maxLines = 1,
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
@@ -98,6 +108,9 @@ private fun NoteScreen(
                     IconButton(
                         onClick = {
                             onAction(NoteAction.SaveNote)
+                            scope.launch {
+                                snackbarHostState.showSnackbar("Note saved")
+                            }
                         },
                         content = {
                             Icon(
@@ -124,15 +137,17 @@ private fun NoteScreen(
                 contentColor = colorScheme.onPrimaryContainer,
                 content = {
                     Icon(
-                        imageVector = FontAwesomeIcons.Solid.Check,
+                        imageVector = FontAwesomeIcons.Solid.Edit,
                         contentDescription = null,
                         modifier = Modifier.size(24.dp)
                     )
                 }
             )
         },
-        modifier = Modifier
-            .fillMaxSize(),
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
+        },
+        modifier = Modifier.fillMaxSize(),
         content = { padding ->
             NoteContent(
                 padding = padding,

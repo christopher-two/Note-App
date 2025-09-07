@@ -1,5 +1,9 @@
 # Notes App
 
+
+
+![Notes App GIF](/docs/app_gif.gif)
+
 Aplicación de ejemplo para tomar notas, desarrollada nativamente para Android utilizando tecnologías modernas y buenas prácticas de desarrollo.
 
 ## Propósito
